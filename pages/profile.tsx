@@ -24,10 +24,13 @@ const Profile = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.post("https://lensserver.onrender.com/createProfile", {
-        handle,
-        to: address,
-      });
+      const response = await axios.post(
+        "https://lensserver.onrender.com/createProfile",
+        {
+          handle,
+          to: address,
+        }
+      );
       setProfileResult(response.data);
       setIsLoggedIn(true); // Assume creating a profile also logs you in
     } catch (err: any) {
@@ -59,10 +62,13 @@ const Profile = () => {
     setLoadingAuth(true);
     setError("");
     try {
-      const response = await axios.post("https://lensserver.onrender.com/loginProfile", {
-        address,
-        profile_id: profileId,
-      });
+      const response = await axios.post(
+        "https://lensserver.onrender.com/loginProfile",
+        {
+          address,
+          profile_id: profileId,
+        }
+      );
       setAuthResult(response.data);
       setIsLoggedIn(true); // Set login state to true upon successful login
     } catch (err: any) {
@@ -76,9 +82,12 @@ const Profile = () => {
     setPosting(true);
     setError("");
     try {
-      const response = await axios.post("https://lensserver.onrender.com/postContent", {
-        textMessage,
-      });
+      const response = await axios.post(
+        "https://lensserver.onrender.com/postContent",
+        {
+          textMessage,
+        }
+      );
       setPostResult("Content posted successfully!");
       setPostedContents((prevContents: any) => [...prevContents, textMessage]);
       console.log(response.data);
@@ -95,7 +104,7 @@ const Profile = () => {
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center text-black">
       {!isLoggedIn ? (
         <>
-          <div className="bg-white p-6 rounded-lg shadow-lg mb-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg mb-4 w-[30%]">
             <h2 className="text-2xl font-bold mb-4 text-gray-800">
               Create Lens Profile
             </h2>
@@ -127,7 +136,7 @@ const Profile = () => {
             {loading && <p className="mt-4">Creating profile...</p>}
             {error && <p className="mt-4 text-red-500">{error}</p>}
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg mt-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg mt-4 w-[30%]">
             <h2 className="text-2xl font-bold mb-4 text-gray-800">
               Login to Profile
             </h2>
@@ -152,7 +161,7 @@ const Profile = () => {
           </div>
         </>
       ) : (
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-[30%]">
           <h2 className="text-2xl font-bold mb-4 text-gray-800">Welcome !</h2>
           <p>
             {profileResult
@@ -162,24 +171,33 @@ const Profile = () => {
         </div>
       )}
 
-      {managedProfiles && (
-        <div className="bg-white p-6 rounded-lg shadow-lg mt-4">
+      {managedProfiles ? (
+        !isLoggedIn && (
+          <div className="bg-white p-6 rounded-lg shadow-lg mt-4 w-[30%]">
+            <h2 className="text-2xl font-bold mb-4 text-gray-800">
+              Managed Profiles
+            </h2>
+            {Array.isArray(managedProfiles) ? (
+              managedProfiles.map((profile, index) => (
+                <div key={index} className="mb-2">
+                  <p>Profile Id: {profile.id}</p>
+                  <p>Handle: {profile.handle.fullHandle}</p>
+                </div>
+              ))
+            ) : (
+              <div className="mb-2">
+                <p>Profile Id: {managedProfiles.id}</p>
+                <p>Handle: {managedProfiles.handle.fullHandle}</p>
+              </div>
+            )}
+          </div>
+        )
+      ) : (
+        <div className="bg-white p-6 rounded-lg shadow-lg mt-4 w-[30%]">
           <h2 className="text-2xl font-bold mb-4 text-gray-800">
             Managed Profiles
           </h2>
-          {Array.isArray(managedProfiles) ? (
-            managedProfiles.map((profile, index) => (
-              <div key={index} className="mb-2">
-                <p>Profile Id: {profile.id}</p>
-                <p>Handle: {profile.handle.fullHandle}</p>
-              </div>
-            ))
-          ) : (
-            <div className="mb-2">
-              <p>Profile Id: {managedProfiles.id}</p>
-              <p>Handle: {managedProfiles.handle.fullHandle}</p>
-            </div>
-          )}
+          <p>No managed profiles found.</p>
         </div>
       )}
 
@@ -195,7 +213,7 @@ const Profile = () => {
       {loadingProfiles && <p className="mt-4">Fetching managed profiles...</p>}
 
       {isLoggedIn && (
-        <div className="bg-white p-6 rounded-lg shadow-lg mt-4">
+        <div className="bg-white p-6 rounded-lg shadow-lg mt-4 w-[30%]">
           <h2 className="text-2xl font-bold mb-4 text-gray-800">
             Post Content
           </h2>
@@ -219,7 +237,7 @@ const Profile = () => {
         </div>
       )}
       {postedContents.length > 0 && (
-        <div className="bg-white p-6 rounded-lg shadow-lg mt-4">
+        <div className="bg-white p-6 rounded-lg shadow-lg mt-4 w-[30%]">
           <h2 className="text-2xl font-bold mb-4 text-gray-800">
             Posted Content
           </h2>
